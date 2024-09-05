@@ -4,5 +4,5 @@ Jetmaker is an end-to-end framework designed to simplify the development of dist
 # Installation
 ```pip install jetmaker```
 
-**Node 1
+** Node 1
 
