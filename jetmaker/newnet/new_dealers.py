@@ -66,7 +66,7 @@ class Dealer:
                     content = data[universal_id_length:]
                     self.responses[msg_id] = content
                 except Exception as e:
-                    print(e)
+                    None
 
     
         

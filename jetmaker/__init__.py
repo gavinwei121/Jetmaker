@@ -3,43 +3,6 @@ from typing import Any, Dict, List
 from types import FunctionType
 from jetmaker.networking import random_address
 
-"""class RemoteFunction:
-    def __init__(self, head:Client, node_name:str, func_name:str) -> None:
-        self.head=head
-        self.node_name=node_name
-        self.func_name=func_name
-    def run(self, *args, **kwargs):
-        return self.head.call('run_function').run(node_name=self.node_name, 
-                                                  func_name=self.func_name, 
-                                                  params=(args, kwargs)).get()
-
-class RemoteObject:
-    def __init__(self, head:Client, node_name:str, obj_name:str) -> None:
-        self.head=head
-        self.node_name=node_name
-        self.obj_name=obj_name
-    def __getattribute__(self, name: str) -> Any:
-        def run_attr(*args, **kwargs):
-            return self.head.call('run_obj_attr').run(
-                node_name=self.node_name, 
-                obj_name=self.obj_name, 
-                attr_name=name, params=(args, kwargs)
-            ).get()
-        try:
-            return super().__getattribute__(name)
-        except:
-            return run_attr()
-
-class Node:
-    def __init__(self, head:Client, name:str) -> None:
-        self.head = head
-        self.name = name
-    def Object(self, name:str):
-        return RemoteObject(head=self.head, node_name=self.name, obj_name=name)
-    def Function(self, name:str):
-        return RemoteFunction(head=self.head, node_name=self.name, func_name=name)
-"""
-
 class RemoteFunction:
     def __init__(self, head:Client, name:str, ) -> None:
         self.head = head
@@ -69,7 +32,6 @@ class RemoteObject:
             return super().__getattribute__(name)
         except:
             return RemoteAttr(head=self.head, name=name, obj_name=self.name)
-    
 
 class Queue:
     def __init__(self, head:Client, name:str, create:bool) -> None:
@@ -108,7 +70,7 @@ class Lock:
         else:
             self.head.call('create_lock').run(name=name).get()
     def acquire(self,):
-        print(self.head.call('acquire_lock').run(name=self.name).get())
+        self.head.call('acquire_lock').run(name=self.name).get()
     def release(self,):
         self.head.call('release_lock').run(name=self.name).get()
 
@@ -144,7 +106,7 @@ class App:
     
     def __setup(self):
         self.address = random_address()
-        print(self.address)
+       #print(self.address)
         self.running_server = Server(addr=self.address)
         self.running_server.bind('run_function')(self.__run_function)
         self.running_server.bind('run_obj_attr')(self.__run_obj_attr)

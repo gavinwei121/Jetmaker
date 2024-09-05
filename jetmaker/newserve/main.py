@@ -45,7 +45,7 @@ class Server:
         Thread(target=self._receiving_connections, daemon=True).start()
         #self._receiving_connections()
         self.close_event = Event()
-        Thread(target=self._check_closing).start()
+        Thread(target=self._check_closing, daemon=True).start()
     
     def bind(self, name:str):
         def __wrapper__(func):

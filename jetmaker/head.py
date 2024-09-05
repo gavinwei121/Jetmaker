@@ -89,7 +89,7 @@ def get_lock(name:str):
     
 def acquire_lock(name:str):
     val = virtual_locks[name].get()
-    print('got')
+    #print('got')
     return val
 
 def release_lock(name:str):

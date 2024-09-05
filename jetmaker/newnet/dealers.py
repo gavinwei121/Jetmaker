@@ -38,9 +38,9 @@ class Dealer:
         self.response_events:Dict[bytes, Event] = dict()
 
         # start sending messages
-        Thread(target=self._sending).start()
+        Thread(target=self._sending, daemon=True).start()
         # start receiving data
-        Thread(target=self._receiving).start()
+        Thread(target=self._receiving, daemon=True).start()
     
     # send one round
     def _sending_one(self):
@@ -55,7 +55,7 @@ class Dealer:
         # send the data
         self.request_sock.sendall(total_data)
 
-        print('send')
+        #print('send')
 
         # cut the unsent data 
         self.unsent_data = self.unsent_data[length:]

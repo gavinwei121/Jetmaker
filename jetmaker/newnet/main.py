@@ -35,10 +35,10 @@ class Processor:
         self.requests_event = Event() 
 
         # start receiving requests
-        Thread(target=self._receiving).start()
+        Thread(target=self._receiving, daemon=True).start()
 
         # start sending back whatever responses
-        Thread(target=self._sending).start()
+        Thread(target=self._sending, daemon=True).start()
     
     # send one round
     def _sending_one(self):
@@ -137,7 +137,7 @@ class Socket:
 
         self.processor_queue = Queue()
 
-        Thread(target=self._waiting).start()
+        Thread(target=self._waiting, daemon=True).start()
 
     def _waiting(self):
 
@@ -146,12 +146,10 @@ class Socket:
             code = conn.recv(universal_id_length)   
             if code not in self.wait_connections.keys():
                 self.wait_connections[code] = conn
-                print('no connection yet')
             else:
                 # start processing messages
                 processor = Processor(request_sock=self.wait_connections[code], response_sock=conn)
                 self.processor_queue.put(processor)
-                print('got connection')
 
     def accept(self)->Processor:
         return self.processor_queue.get()

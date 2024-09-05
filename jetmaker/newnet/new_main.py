@@ -33,7 +33,7 @@ class Processor:
         self.send_queue = NewQueue()
 
         # start the background sending thread
-        Thread(target=self._sending).start()
+        Thread(target=self._sending, daemon=True).start()
 
     # sending thread
     def _sending(self,):
@@ -74,7 +74,7 @@ class Socket:
 
         self.processor_queue = Queue()
 
-        Thread(target=self._waiting).start()
+        Thread(target=self._waiting, daemon=True).start()
 
     def _waiting(self):
 
