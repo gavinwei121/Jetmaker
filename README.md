@@ -4,6 +4,9 @@ Jetmaker is an end-to-end framework designed to simplify the development of dist
 # Installation
 ```pip install jetmaker```
 
+# Resources
+[Visit Documentation](https://remeny-technologies.gitbook.io/jetmaker-documentation)
+
 # Getting Started
 Below is a simple example of how two distributed nodes access each other's namespace and resource statefully
 ### Node 1
