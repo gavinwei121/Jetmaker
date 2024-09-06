@@ -130,7 +130,7 @@ class App:
         pass
     def Event(self, name:str, create:bool=None):
         return Event(head=self.head, name=name, create=create)
-    def link(self, obj, name:str):
+    def share(self, obj, name:str):
         if isinstance(obj, FunctionType):
             self.functions[name] = obj
             self.head.call('register_func').run(self.name, name).get()
@@ -148,6 +148,10 @@ class App:
     
     def call(self, name:str):
         return RemoteFunction(head=self.head, name=name)
+    
+    def persist(self):
+        while True:
+            input()
     
     
 import os, sys, subprocess, threading
