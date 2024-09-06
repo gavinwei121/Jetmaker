@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jetmaker',  # Replace with your unique package name
-    version='0.1',
+    version='0.11',
     packages=find_packages(),
     install_requires=[
         # List any dependencies here
