@@ -36,7 +36,7 @@ instance = Instance()
 link it to the app for the network applications to access
 ```python
 app.share(recv_string, 'recv_str')
-app.sahre(instance, 'ins')
+app.share(instance, 'ins')
 ```
 let this persist if you it always available for access
 ```python

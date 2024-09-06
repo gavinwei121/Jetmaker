@@ -1,3 +1,5 @@
+LICENSE
+README.md
 setup.py
 jetmaker/__init__.py
 jetmaker/head.py
