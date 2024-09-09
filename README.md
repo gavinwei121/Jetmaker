@@ -9,7 +9,7 @@ Jetmaker is an end-to-end framework designed to simplify the development of dist
 [Visit Documentation](https://remeny-technologies.gitbook.io/jetmaker-documentation)
 
 # Getting Started
-Below is a simple example of how two distributed nodes access each other's namespace and resource statefully
+Below is a simple example of how two distributed nodes interact with each other's data, namespace and resource
 ### Node 1
 Use the IP address and port of Node 1 to start this Jetmaker app, the node calling create_app will act as the coordinator node.
 ```python
