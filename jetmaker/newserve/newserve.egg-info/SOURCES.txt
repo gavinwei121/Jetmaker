@@ -1,5 +1,0 @@
-setup.py
-newserve.egg-info/PKG-INFO
-newserve.egg-info/SOURCES.txt
-newserve.egg-info/dependency_links.txt
-newserve.egg-info/top_level.txt
