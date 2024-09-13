@@ -30,8 +30,6 @@ create a simple function and a simple stateful object for testing
 def recv_string(string):
     return f'{string} is received'
 
-app.link(js, 'js')
-
 class Instance:
     def __init__(self) -> None:
         self.val = 0
