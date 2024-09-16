@@ -1,7 +1,8 @@
 from jetmaker.newserve.main import Server, Client
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 from types import FunctionType
 from jetmaker.networking import random_address
+from jetmaker.other import random_string, notify
 
 class RemoteFunction:
     def __init__(self, head:Client, name:str, ) -> None:
@@ -103,25 +104,25 @@ class App:
     def __run_obj_attr(self, obj_name:str, attr_name:str, params):
         args, kwargs = params
         return self.objects[obj_name].__getattribute__(attr_name)(*args, **kwargs)
-    
+        
     def __setup(self):
         self.address = random_address()
-       #print(self.address)
         self.running_server = Server(addr=self.address)
         self.running_server.bind('run_function')(self.__run_function)
         self.running_server.bind('run_obj_attr')(self.__run_obj_attr)
         return self.address
 
-    def __init__(self, host:str, password:str, name:str) -> None:
+    def __init__(self, host:str, password:str, name:str, is_head=False) -> None:
         self.head = Client(addr=host)
         self.__setup()
         result = self.head.call('connect').run(pwd=password,
                                                name=name, 
-                                            addr=self.address)
+                                            addr=self.address).get()
+        if not is_head:
+            notify(f'---------- Connected to JetMaker App running at {host} ----------')
+            print()
         self.name = name
 
-    def space(self, name:str):
-        pass
     def Queue(self, name:str, create:bool=None):
         return Queue(head=self.head, name=name, create=create)
     def Lock(self, name:str, create:bool=None):
@@ -137,8 +138,6 @@ class App:
         else:
             self.objects[name] = obj
             self.head.call('register_obj').run(self.name, name).get()
-    """def node(self, name:str):
-        return Node(head=self.head, name=name)"""
     
     def Map(self, name:str):
         return Map(head=self.head, name=name, create=None)
@@ -152,7 +151,16 @@ class App:
     def persist(self):
         while True:
             input()
-    
+
+    def stream_listen(self, topic:str):
+        def _create_listener_(listener):
+            listener_id = random_string()
+            self.running_server.bind(listener_id)(listener)
+            self.head.call('bind_listener').run(listener_id, self.name, topic).get()
+        return _create_listener_
+            
+    def broadcast(self, content, topics:List[str], ):
+        self.head.call('broadcast').run(topics, content).get()
     
 import os, sys, subprocess, threading
 
@@ -175,12 +183,12 @@ import time
 
 threads = dict()
     
-def join_app(host:str, password:str, join_as:str):
-    return App(host=host, password=password, name=join_as)
+def join_app(host:str, password:str, join_as:str, is_head=False):
+    return App(host=host, password=password, name=join_as, is_head=is_head)
         
 def create_app(host:str, password:str, join_as:str):
-    threads[0] = threading.Thread(target=run_head, args=(host, password))
+    threads[0] = threading.Thread(target=run_head, args=(host, password),daemon=True)
     threads[0].start()
     time.sleep(1)
-    return join_app(host=host, password=password, join_as=join_as)
+    return join_app(host=host, password=password, join_as=join_as, is_head=True)
 

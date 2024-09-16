@@ -155,6 +155,4 @@ class Socket:
         return self.processor_queue.get()
 
 
-            
-            
         

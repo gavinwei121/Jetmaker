@@ -1,7 +1,7 @@
 from jetmaker.newnet.new_main import Socket, Processor, Request
 from concurrent.futures import ThreadPoolExecutor
 import cloudpickle
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 
 class Server:
 
@@ -84,6 +84,8 @@ class ClientRequest:
 class Client:
     def __init__(self, addr:str) -> None:
         self.dealer = Dealer(address=addr)
+        self.lock = Lock()
     def call(self, name:str):
-        return ClientRequest(dealer=self.dealer, name=name)
+        with self.lock:
+            return ClientRequest(dealer=self.dealer, name=name)
 

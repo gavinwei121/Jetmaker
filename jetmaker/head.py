@@ -3,6 +3,10 @@ from argparse import ArgumentParser
 from typing import Dict, List
 from queue import Queue
 from threading import Event, Lock
+from other import notify
+from concurrent.futures import ThreadPoolExecutor
+
+pool_executor = ThreadPoolExecutor()
 
 parser = ArgumentParser()
 parser.add_argument('host')
@@ -162,7 +166,35 @@ def register_obj(node_name:str, name:str):
     object_proxies[name] = node_name
 
 
-    
+# handlers for streaming processing
+
+event_listener_nodes:Dict[str, list] = dict()  
+
+def bind_listener(listener_id:str, node_name:str, topic:str):
+    if topic in event_listener_nodes:
+        event_listener_nodes[topic].append((node_name, listener_id))
+    else:
+        event_listener_nodes[topic] = [(node_name, listener_id), ]
+
+def do_broadcast(info, message):
+    try:
+        node_name, listener_id = info
+        clients[node_name].call(listener_id).run(message)
+    except:
+        None
+
+def broadcast_single(topic:str, message):
+    if topic in event_listener_nodes:
+        for info in event_listener_nodes[topic]:
+            pool_executor.submit(do_broadcast, info, message)
+            #node_name, listener_id = info
+            #print(f'broadcasting: {info}')
+            #clients[node_name].call(listener_id).run(message)
+            #print('broadcasted')
+
+def broadcast(topics:List[str], message):
+    for topic in topics:
+        broadcast_single(topic, message)
 
 
 server = Server(addr=host)
@@ -189,5 +221,13 @@ server.bind('set_map')(set_map)
 server.bind('get_map')(get_map)
 server.bind('register_func')(register_func)
 server.bind('register_obj')(register_obj)
+server.bind('bind_listener')(bind_listener)
+server.bind('broadcast')(broadcast)
 
-input()
+notify(f'---------- JetMaker App is running at {host} ----------')
+print()
+
+import time
+
+while True:
+    time.sleep(120)
