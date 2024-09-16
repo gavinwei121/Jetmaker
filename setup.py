@@ -6,6 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         # List any dependencies here
+        'cloudpickle',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
