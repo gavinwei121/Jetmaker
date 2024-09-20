@@ -8,8 +8,6 @@ Jetmaker is an end-to-end framework designed to simplify the development of dist
 # Commmunication
 Join this [Discord Community](https://discord.gg/ajKwMGQR) to make Jetmaker better together ^_^ !!!
 
-Email me ( testcodegavin@gmail.com ) if you wanna share with me your thoughts about Jetmaker.
-
 # Resources
 [Visit Documentation](https://remeny-technologies.gitbook.io/jetmaker-documentation)
 
